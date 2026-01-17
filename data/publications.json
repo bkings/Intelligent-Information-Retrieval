@@ -3,39 +3,35 @@
     "title": "A community\u2011based entropic method to identify influential nodes across multiple social networks",
     "pub_link": "https://pureportal.coventry.ac.uk/en/publications/a-communitybased-entropic-method-to-identify-influential-nodes-ac/",
     "authors": [
-      "Ghasemi, A."
+      "Abdorasoul Ghasemi",
+      "Narges Vafaei",
+      "Farnaz Sheikhi"
     ],
-    "year": "N/A",
     "author_profiles": [
       "https://pureportal.coventry.ac.uk/en/persons/abdorasoul-ghasemi/"
-    ]
+    ],
+    "year": "",
+    "abstract": "Identifying influential nodes in social networks \u2212 by determining the most effective and efficient set of primary users \u2212 is acrucial task for maximizing the spread of influence. The competitive world of social networks and the variety of servicesthey provide have persuaded users to apply for the membership of several networks. This situation makes involvement ofthe shared individuals across multiple social networks essential for the effective dissemination of information. In this paper,we introduce a community-based entropic method to identify influential nodes in multiple social networks, taking intoaccount the effect of shared users. The proposed method, titled IM2-SE, focuses on calculating a total structural entropy foreach node. This structural entropy is defined as the weighted sum of the structural entropies of the node in the networks andin the communities, it belongs to. The structural entropy of a node is based on Tsallis entropy considering both local andglobal structures of the network, and it utilizes the degree of centrality and betweenness centrality. Then, the nodes with thehighest total structural entropy are identified as the influential nodes. The empirical evaluation of the proposed method onthe real-world datasets including homogeneous and heterogeneous networks, demonstrates its superior performance to thebaseline methods. Furthermore, the impact of the shared nodes between networks in identifying the influential nodes hasbeen examined, revealing that up to 50% of the identified influential nodes are the shared nodes between specific networks.",
+    "doi": "https://doi.org/10.1007/s13278-025-01441-y",
+    "pdf_link": "/files/109577027/Ghasemi2025VoR_105567539.pdf",
+    "content": "a community based entropic method to identify influential nodes across multiple social networks abdorasoul ghasemi narges vafaei farnaz sheikhi identifying influential nodes in social networks by determining the most effective and efficient set of primary users is acrucial task for maximizing the spread of influence the competitive world of social networks and the variety of servicesthey provide have persuaded users to apply for the membership of several networks this situation makes involvement ofthe shared individuals across multiple social networks essential for the effective dissemination of information in this paper we introduce a community based entropic method to identify influential nodes in multiple social networks taking intoaccount the effect of shared users the proposed method titled im2 se focuses on calculating a total structural entropy foreach node this structural entropy is defined as the weighted sum of the structural entropies of the node in the networks andin the communities it belongs to the structural entropy of a node is based on tsallis entropy considering both local andglobal structures of the network and it utilizes the degree of centrality and betweenness centrality then the nodes with thehighest total structural entropy are identified as the influential nodes the empirical evaluation of the proposed method onthe real world datasets including homogeneous and heterogeneous networks demonstrates its superior performance to thebaseline methods furthermore the impact of the shared nodes between networks in identifying the influential nodes hasbeen examined revealing that up to 50 of the identified influential nodes are the shared nodes between specific networks"
   },
   {
-    "title": "A Hybrid Physics-Informed Neural Network: SEIRD Model for Forecasting COVID-19 Intensive Care Unit Demand in England",
-    "pub_link": "https://pureportal.coventry.ac.uk/en/publications/a-hybrid-physics-informed-neural-network-seird-model-for-forecast/",
+    "title": "Explainable AI Insights for Symbolic Computation: A case study on selecting the variable ordering for cylindrical algebraic decomposition",
+    "pub_link": "https://pureportal.coventry.ac.uk/en/publications/explainable-ai-insights-for-symbolic-computation-a-case-study-on-/",
     "authors": [
-      "Ajao-Olarinoye, M.",
-      "Palade, V.",
-      "He, F.",
-      "Wark, P. A."
+      "Matthew England",
+      "Lynn Pickering",
+      "Tereso del R\u00edo",
+      "Kelly Cohen"
     ],
-    "year": "N/A",
-    "author_profiles": [
-      "https://pureportal.coventry.ac.uk/en/persons/michael-ajao-olarinoye/",
-      "https://pureportal.coventry.ac.uk/en/persons/vasile-palade/",
-      "https://pureportal.coventry.ac.uk/en/persons/fei-he/",
-      "https://pureportal.coventry.ac.uk/en/persons/petra-wark/"
-    ]
-  },
-  {
-    "title": "An iterated greedy algorithm with variable reconstruction size for the obnoxious p-median problem",
-    "pub_link": "https://pureportal.coventry.ac.uk/en/publications/an-iterated-greedy-algorithm-with-variable-reconstruction-size-fo/",
-    "authors": [
-      "England, M."
-    ],
-    "year": "N/A",
     "author_profiles": [
       "https://pureportal.coventry.ac.uk/en/persons/matthew-england/"
-    ]
+    ],
+    "year": "",
+    "abstract": "In recent years there has been increased use of machine learning (ML) techniques within mathematics, including symbolic computation where it may be applied safely to optimise or select algorithms. This paper explores whether using explainable AI (XAI) techniques on such ML models can offer new insight for symbolic computation, inspiring new implementations within computer algebra systems that do not directly call upon AI tools. We present a case study on the use of ML to select the variable ordering for cylindrical algebraic decomposition. It has already been demonstrated that ML can make the choice well, but here we show how the SHAP tool for explainability can be used to inform new heuristics of a size and complexity similar to those human-designed heuristics currently commonly used in symbolic computation.",
+    "doi": "https://doi.org/10.1016/j.jsc.2023.102276",
+    "pdf_link": "/files/79258043/Published.pdf",
+    "content": "explainable ai insights for symbolic computation a case study on selecting the variable ordering for cylindrical algebraic decomposition matthew england lynn pickering tereso del r\u00edo kelly cohen in recent years there has been increased use of machine learning ml techniques within mathematics including symbolic computation where it may be applied safely to optimise or select algorithms this paper explores whether using explainable ai xai techniques on such ml models can offer new insight for symbolic computation inspiring new implementations within computer algebra systems that do not directly call upon ai tools we present a case study on the use of ml to select the variable ordering for cylindrical algebraic decomposition it has already been demonstrated that ml can make the choice well but here we show how the shap tool for explainability can be used to inform new heuristics of a size and complexity similar to those human designed heuristics currently commonly used in symbolic computation"
   }
 ]

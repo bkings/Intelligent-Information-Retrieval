@@ -1,7 +1,6 @@
 import requests
 import time
 import json
-import re
 import logging
 
 from typing import List, Dict, Any
@@ -15,6 +14,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from bs4 import BeautifulSoup
+
+from ir_core.index_manager import preprocess
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -73,12 +74,6 @@ def remove_consent_overlay(driver):
         overlays.forEach(o => o.remove());
     """
     )
-
-
-def preprocess(text: str) -> str:
-    """Tokenize, lowercase, remove punctuations"""
-    text = re.sub(r"[^\w\s]", " ", text.lower())
-    return " ".join(text.split())  # Normalizing the whitespaces
 
 
 def extract_publication_data(soup: BeautifulSoup) -> List[Dict[str, Any]]:
@@ -140,6 +135,7 @@ def get_publications_url(driver: WebDriver, base_url: str) -> str:
 
 def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
     """Crawl individual publication page for full details"""
+    print(f"Crawling individual page {pub_url}")
     driver.get(pub_url)
     time.sleep(WAIT_TIME)
     remove_consent_overlay(driver)
@@ -159,33 +155,57 @@ def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
 
     title_elem = soup.find("h1", id="firstheading") or soup.select_one("h1")
     pub_data["title"] = title_elem.get_text(strip=True) if title_elem else "No Title"
-    author_links = soup.select("a[href*='/en/persons']")
+    author_links = soup.select(".introduction p a[href*='/en/persons']")
+
+    # Verify if there is at least one member author
+    if not author_links:
+        return None
+
     for a in author_links:
         name = a.get_text(strip=True)
         if name and len(name) > 1:
             pub_data["authors"].append(name)
             pub_data["author_profiles"].append(a.get("href", ""))
 
+    # Add non-member authors as well
+    non_member_authors_p_tag = soup.select_one(".introduction .relations.persons")
+    non_member_authors = "".join(
+        non_member_authors_p_tag.find_all(string=True, recursive=False)
+    ).strip()
+    if non_member_authors:
+        # non_member_authors_list = non_member_authors.strip(", ").split(",")
+        pub_data["authors"].extend(
+            a.strip() for a in non_member_authors.split(",") if a.strip()
+        )
+
     year_elem = soup.select_one("time, .result-meta-data [datetime], [class*='year']")
-    pub_data["year"] = year_elem.get(
-        "datetime", year_elem.get_text(strip=True) if year_elem else "N/A"
-    )
+    if year_elem:
+        logger.info("Year located.")
+        pub_data["year"] = year_elem.get(
+            "datetime", year_elem.get_text(strip=True) if year_elem else "N/A"
+        )
 
     abstract_elem = soup.select_one("[class*='abstract'], .description, p.abstract")
-    pub_data["abstract"] = abstract_elem.get_text(strip=True) if abstract_elem else ""
+    if abstract_elem:
+        logger.info("Abstract located.")
+        pub_data["abstract"] = (
+            abstract_elem.get_text(strip=True) if abstract_elem else ""
+        )
 
     doi_elem = soup.select_one("a[title*='DOI'], [href*='doi.org']")
-    pub_data["doi"] = doi_elem.get("href", "") if doi_elem else ""
+    if doi_elem:
+        pub_data["doi"] = doi_elem.get("href", "") if doi_elem else ""
 
     pdf_elem = soup.select_one("a[href*='.pdf'], [title*='PDF']")
-    pub_data["pdf_link"] = pdf_elem.get("href", "") if pdf_elem else ""
+    if pdf_elem:
+        pub_data["pdf_link"] = pdf_elem.get("href", "") if pdf_elem else ""
 
     pub_data["content"] = preprocess(
         f"{pub_data['title']} {' '.join(pub_data['authors'])} {pub_data['year']} {pub_data['abstract']}"
     )
 
-    print(f"Crawled details: {pub_data['title'][:50]} ... ")
     logger.info(f"LOGGER: Crawled details: {pub_data['title'][:50]} ... ")
+    return pub_data
 
 
 def crawl_all_pages(
@@ -194,38 +214,80 @@ def crawl_all_pages(
     """Crawl all pages politely"""
     all_pubs = []
     current_url = start_url
-    page_num = 1
+    page_num = 0
     while current_url:
-        print(f"Crawling page {page_num}: {current_url}")
+        print(f"Crawling all publications from page {page_num}: {current_url}")
         driver.get(current_url)
         time.sleep(WAIT_TIME)
         remove_consent_overlay(driver)
 
-        try:
-            soup = BeautifulSoup(driver.page_source, "html.parser")
-            page_pubs = extract_publication_data(soup)
-            all_pubs.extend(page_pubs)
-            print(f"Extracted {len(page_pubs)} publications from page {page_num}")
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+        pub_links = soup.select("#main-content .list-results .list-result-item h3 a")
 
-            # Look if next page is present
-            next_button = wait.until(
-                EC.element_to_be_clickable(
-                    (By.CSS_SELECTOR, "a[rel='next'], .pagination .next")
-                )
-            )
-            next_url = next_button.get_attribute("href")
-            if not next_url or next_url == current_url:
+        i = 1
+
+        for link_elem in pub_links:
+            pub_url = link_elem.get("href")
+            if pub_url and not pub_url.startswith("https://"):
+                pub_url = "https://pureportal.coventry.ac.uk" + pub_url
+            if pub_url:
+                pub_data = crawl_single_publication(driver, pub_url)
+                if pub_data:
+                    all_pubs.append(pub_data)
+                time.sleep(WAIT_TIME)
+
+            if i == 1:
                 break
-            # current_url = next_url
-            page_num += 1
-            driver.execute_script("arguments[0].scrollInView();", next_button)
+            i += 1
+
+        # Only For testing
+        if page_num == 1:
+            page_num = 6
+
+        # Handling pagination
+        try:
+            # Only for testing
+            if page_num != 0:
+                current_url_page_no = current_url[-1]
+                replace_string = "page=" + current_url_page_no
+                replace_to = "page=" + str(page_num)
+                current_url = current_url.replace(replace_string, replace_to)
+
+            # Return back to home url to access pagination
+            driver.get(current_url)
             time.sleep(WAIT_TIME)
-        except (TimeoutException, NoSuchElementException):
-            print("No more pages or load timeout")
-            break
+            remove_consent_overlay(driver)
+            print(f"Current url {driver.current_url}")
+
+            try:
+                next_btn_exists = wait.until(
+                    EC.presence_of_element_located(
+                        (By.CSS_SELECTOR, ".pages .nextLink")
+                    )
+                )
+            except TimeoutException:
+                next_btn_exists = False
+
+            if next_btn_exists:
+                next_page_btn = wait.until(
+                    EC.element_to_be_clickable(
+                        (
+                            By.CSS_SELECTOR,
+                            ".pages .nextLink, a[rel='next'], .pagination .next",
+                        )
+                    )
+                )
+                next_url = next_page_btn.get_attribute("href")
+
+            if next_url and next_url != current_url:
+                current_url = next_url
+                page_num += 1
+            else:
+                current_url = None
+
         except Exception as e:
             print("Error during crawl", e)
-            break
+            current_url = None
 
     return all_pubs
 
