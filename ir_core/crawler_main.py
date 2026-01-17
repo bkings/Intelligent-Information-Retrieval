@@ -25,6 +25,8 @@ DATA_PATH = Path("data")
 DATA_PATH.mkdir(exist_ok=True)
 INDEX_FILE = DATA_PATH / "publications.json"
 
+unique_publications: set[str] = set()
+
 
 def robots_txt_satisfied(base_url: str) -> bool:
     """
@@ -114,6 +116,11 @@ def get_publication_url(driver: WebDriver, base_url: str) -> str:
 
 def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
     """Crawl individual publication page for full details"""
+    # Check if current publication has already been crawled
+    if pub_url in unique_publications:
+        logger.info(f"Skipping url: {pub_url} as its already crawled")
+        return
+
     print(f"Crawling individual page {pub_url}")
     driver.get(pub_url)
     time.sleep(WAIT_TIME)
@@ -184,6 +191,7 @@ def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
         f"{pub_data['title']} {' '.join(pub_data['authors'])} {pub_data['year']} {pub_data['abstract']}"
     )
 
+    unique_publications.add(pub_url)
     logger.info(f"LOGGER: Crawled details: {pub_data['title'][:50]} ... ")
     return pub_data
 
@@ -216,8 +224,8 @@ def crawl_all_pages(
                 pub_data = crawl_single_publication(driver, pub_url)
                 if pub_data:
                     all_pubs.append(pub_data)
-                time.sleep(WAIT_TIME)
-                logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
+                # time.sleep(WAIT_TIME)
+                # logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
 
             if i == 1:
                 break
@@ -236,11 +244,13 @@ def crawl_all_pages(
             #     replace_to = "page=" + str(page_num)
             #     current_url = current_url.replace(replace_string, replace_to)
 
-            # Return back to home url to access pagination
-            driver.get(current_url)
-            time.sleep(WAIT_TIME)
-            logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
-            remove_consent_overlay(driver)
+            # Return back to home url to access pagination after being directed to single publication page
+            # If multiple authors have same publication then we won't re-crawl and as a result we will not be directed to that page
+            if driver.current_url != current_url:
+                driver.get(current_url)
+                time.sleep(WAIT_TIME)
+                logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
+                remove_consent_overlay(driver)
             print(f"Current url {driver.current_url}")
 
             try:
@@ -292,7 +302,7 @@ def crawl_all_profiles(
     i = 1
 
     for link_elem in profile_links:
-        if i in [1,2,10]:
+        if i in [1, 2, 10]:
             profile_url = link_elem.get("href")
             if profile_url and not profile_url.startswith("https://"):
                 profile_url = "https://pureportal.coventry.ac.uk" + profile_url
