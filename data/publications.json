@@ -1,37 +1,82 @@
 [
   {
-    "title": "A community\u2011based entropic method to identify influential nodes across multiple social networks",
-    "pub_link": "https://pureportal.coventry.ac.uk/en/publications/a-communitybased-entropic-method-to-identify-influential-nodes-ac/",
+    "title": "Learning from less: SINDy Surrogates in RL",
+    "pub_link": "https://pureportal.coventry.ac.uk/en/publications/learning-from-less-sindy-surrogates-in-rl/",
     "authors": [
-      "Abdorasoul Ghasemi",
-      "Narges Vafaei",
-      "Farnaz Sheikhi"
+      "Aniket Dixit",
+      "Muhammad Ibrahim Khan",
+      "Faizan Ahmed",
+      "James Brusey"
     ],
     "author_profiles": [
-      "https://pureportal.coventry.ac.uk/en/persons/abdorasoul-ghasemi/"
+      "https://pureportal.coventry.ac.uk/en/persons/aniket-dixit/",
+      "https://pureportal.coventry.ac.uk/en/persons/muhammad-ibrahim-khan/",
+      "https://pureportal.coventry.ac.uk/en/persons/faizan-ahmed/",
+      "https://pureportal.coventry.ac.uk/en/persons/james-brusey/"
     ],
     "year": "",
-    "abstract": "Identifying influential nodes in social networks \u2212 by determining the most effective and efficient set of primary users \u2212 is acrucial task for maximizing the spread of influence. The competitive world of social networks and the variety of servicesthey provide have persuaded users to apply for the membership of several networks. This situation makes involvement ofthe shared individuals across multiple social networks essential for the effective dissemination of information. In this paper,we introduce a community-based entropic method to identify influential nodes in multiple social networks, taking intoaccount the effect of shared users. The proposed method, titled IM2-SE, focuses on calculating a total structural entropy foreach node. This structural entropy is defined as the weighted sum of the structural entropies of the node in the networks andin the communities, it belongs to. The structural entropy of a node is based on Tsallis entropy considering both local andglobal structures of the network, and it utilizes the degree of centrality and betweenness centrality. Then, the nodes with thehighest total structural entropy are identified as the influential nodes. The empirical evaluation of the proposed method onthe real-world datasets including homogeneous and heterogeneous networks, demonstrates its superior performance to thebaseline methods. Furthermore, the impact of the shared nodes between networks in identifying the influential nodes hasbeen examined, revealing that up to 50% of the identified influential nodes are the shared nodes between specific networks.",
-    "doi": "https://doi.org/10.1007/s13278-025-01441-y",
-    "pdf_link": "/files/109577027/Ghasemi2025VoR_105567539.pdf",
-    "content": "a community based entropic method to identify influential nodes across multiple social networks abdorasoul ghasemi narges vafaei farnaz sheikhi identifying influential nodes in social networks by determining the most effective and efficient set of primary users is acrucial task for maximizing the spread of influence the competitive world of social networks and the variety of servicesthey provide have persuaded users to apply for the membership of several networks this situation makes involvement ofthe shared individuals across multiple social networks essential for the effective dissemination of information in this paper we introduce a community based entropic method to identify influential nodes in multiple social networks taking intoaccount the effect of shared users the proposed method titled im2 se focuses on calculating a total structural entropy foreach node this structural entropy is defined as the weighted sum of the structural entropies of the node in the networks andin the communities it belongs to the structural entropy of a node is based on tsallis entropy considering both local andglobal structures of the network and it utilizes the degree of centrality and betweenness centrality then the nodes with thehighest total structural entropy are identified as the influential nodes the empirical evaluation of the proposed method onthe real world datasets including homogeneous and heterogeneous networks demonstrates its superior performance to thebaseline methods furthermore the impact of the shared nodes between networks in identifying the influential nodes hasbeen examined revealing that up to 50 of the identified influential nodes are the shared nodes between specific networks"
+    "abstract": "This paper presents a method to create simpler versions of reinforcement learning (RL) environments using the Sparse Identification of Nonlinear Dynamics (SINDy) algorithm. The method was tested in OpenAI Gym's Mountain Car and Lunar Lander environments. Results show that these SINDy-based models can closely match the real environment's behavior while cutting down computational cost by 20\u201335%. With just 75 data points for Mountain Car and 1000 for Lunar Lander, the models achieved over 0.997 state-wise correlation, with very low prediction errors (as low as 3.11 \u00d7 10\u207b\u2076 for Mountain Car velocity and 1.42 \u00d7 10\u207b\u2076 for Lunar Lander position). RL agents trained in these simplified environments needed fewer steps to learn (65,075 vs. 100,000 for Mountain Car and 801,000 vs. 1,000,000 for Lunar Lander) and performed similarly to those trained in the full environments. This work offers a fast and accurate way to create interpretable models for use in model-based RL.",
+    "doi": "https://doi.org/10.48550/arXiv.2504.18113",
+    "pdf_link": "",
+    "content": "learning from less sindy surrogates in rl aniket dixit muhammad ibrahim khan faizan ahmed james brusey this paper presents a method to create simpler versions of reinforcement learning rl environments using the sparse identification of nonlinear dynamics sindy algorithm the method was tested in openai gym s mountain car and lunar lander environments results show that these sindy based models can closely match the real environment s behavior while cutting down computational cost by 20 35 with just 75 data points for mountain car and 1000 for lunar lander the models achieved over 0 997 state wise correlation with very low prediction errors as low as 3 11 10 \u2076 for mountain car velocity and 1 42 10 \u2076 for lunar lander position rl agents trained in these simplified environments needed fewer steps to learn 65 075 vs 100 000 for mountain car and 801 000 vs 1 000 000 for lunar lander and performed similarly to those trained in the full environments this work offers a fast and accurate way to create interpretable models for use in model based rl"
   },
   {
-    "title": "Explainable AI Insights for Symbolic Computation: A case study on selecting the variable ordering for cylindrical algebraic decomposition",
-    "pub_link": "https://pureportal.coventry.ac.uk/en/publications/explainable-ai-insights-for-symbolic-computation-a-case-study-on-/",
+    "title": "A Hybrid Physics-Informed Neural Network: SEIRD Model for Forecasting COVID-19 Intensive Care Unit Demand in England",
+    "pub_link": "https://pureportal.coventry.ac.uk/en/publications/a-hybrid-physics-informed-neural-network-seird-model-for-forecast/",
     "authors": [
-      "Matthew England",
-      "Lynn Pickering",
-      "Tereso del R\u00edo",
-      "Kelly Cohen"
+      "Michael Ajao-Olarinoye",
+      "Vasile Palade",
+      "Fei He",
+      "Petra A. Wark",
+      "Zindoga Mukandavire",
+      "Seyed Mousavi"
     ],
     "author_profiles": [
-      "https://pureportal.coventry.ac.uk/en/persons/matthew-england/"
+      "https://pureportal.coventry.ac.uk/en/persons/michael-ajao-olarinoye/",
+      "https://pureportal.coventry.ac.uk/en/persons/vasile-palade/",
+      "https://pureportal.coventry.ac.uk/en/persons/fei-he/",
+      "https://pureportal.coventry.ac.uk/en/persons/petra-wark/"
     ],
     "year": "",
-    "abstract": "In recent years there has been increased use of machine learning (ML) techniques within mathematics, including symbolic computation where it may be applied safely to optimise or select algorithms. This paper explores whether using explainable AI (XAI) techniques on such ML models can offer new insight for symbolic computation, inspiring new implementations within computer algebra systems that do not directly call upon AI tools. We present a case study on the use of ML to select the variable ordering for cylindrical algebraic decomposition. It has already been demonstrated that ML can make the choice well, but here we show how the SHAP tool for explainability can be used to inform new heuristics of a size and complexity similar to those human-designed heuristics currently commonly used in symbolic computation.",
-    "doi": "https://doi.org/10.1016/j.jsc.2023.102276",
-    "pdf_link": "/files/79258043/Published.pdf",
-    "content": "explainable ai insights for symbolic computation a case study on selecting the variable ordering for cylindrical algebraic decomposition matthew england lynn pickering tereso del r\u00edo kelly cohen in recent years there has been increased use of machine learning ml techniques within mathematics including symbolic computation where it may be applied safely to optimise or select algorithms this paper explores whether using explainable ai xai techniques on such ml models can offer new insight for symbolic computation inspiring new implementations within computer algebra systems that do not directly call upon ai tools we present a case study on the use of ml to select the variable ordering for cylindrical algebraic decomposition it has already been demonstrated that ml can make the choice well but here we show how the shap tool for explainability can be used to inform new heuristics of a size and complexity similar to those human designed heuristics currently commonly used in symbolic computation"
+    "abstract": "COVID-19 poses a complex and unprecedented challenge to public health and society, requiring scientific efforts to understand, model, diagnose, and control the disease. The integration of physics-informed neural networks (PINNs) with epidemiological models offers a powerful tool for understanding the dynamics of infectious diseases and developing effective strategies to control and mitigate their impact. In this study, we develop a novel hybrid approach to modelling and forecasting the dynamics and the demand for healthcare resources. We take advantage of the concept of PINNs to capture the dynamics of infectious diseases, estimate key parameters, and unobserved states in the ability of the model, using the neural network to integrate physical laws directly into the learning process of a modified compartmental model. We also make use of the strength of recurrent neural networks (RNNs) to combine data generated by a PINN and lagged covariates of target variables to forecast demand from the intensive care unit demand using different variations of RNN models. The results indicate that our proposed hybrid framework is highly effective in capturing the dynamics of the pandemic and providing insight into the dynamics of the disease.",
+    "doi": "https://doi.org/10.1201/9781003570882-15",
+    "pdf_link": "",
+    "content": "a hybrid physics informed neural network seird model for forecasting covid 19 intensive care unit demand in england michael ajao olarinoye vasile palade fei he petra a wark zindoga mukandavire seyed mousavi covid 19 poses a complex and unprecedented challenge to public health and society requiring scientific efforts to understand model diagnose and control the disease the integration of physics informed neural networks pinns with epidemiological models offers a powerful tool for understanding the dynamics of infectious diseases and developing effective strategies to control and mitigate their impact in this study we develop a novel hybrid approach to modelling and forecasting the dynamics and the demand for healthcare resources we take advantage of the concept of pinns to capture the dynamics of infectious diseases estimate key parameters and unobserved states in the ability of the model using the neural network to integrate physical laws directly into the learning process of a modified compartmental model we also make use of the strength of recurrent neural networks rnns to combine data generated by a pinn and lagged covariates of target variables to forecast demand from the intensive care unit demand using different variations of rnn models the results indicate that our proposed hybrid framework is highly effective in capturing the dynamics of the pandemic and providing insight into the dynamics of the disease"
+  },
+  {
+    "title": "Sustainable future? Building and life-style assessment",
+    "pub_link": "https://pureportal.coventry.ac.uk/en/publications/sustainable-future-building-and-life-style-assessment/",
+    "authors": [
+      "E. I. Gaura",
+      "J. Brusey",
+      "J. Halloran",
+      "R. Wilkins",
+      "R. Rednic"
+    ],
+    "author_profiles": [
+      "https://pureportal.coventry.ac.uk/en/persons/elena-gaura/",
+      "https://pureportal.coventry.ac.uk/en/persons/james-brusey/"
+    ],
+    "year": "",
+    "abstract": "Energy, both in terms of its production and its usage has occupied a prime place in research as well as politics and world economy for the past few years. The majority of nations are aiming to deliver severe carbon cuts in the next few years. However, achieving a carbon-free future needs more than infrastructure investment and novel efficient technologies for buildings, transportation and other large consumer domains. It needs a better understanding of people as consumers, as well as a better understanding of energy waste across the multitude of socio-techical systems around us. With regards to the built environment and particularly residential buildings, the authors propose that dual, quantitative and qualitative approaches to characterising, assessing and improving occupied buildings are necessary. Such approaches would synchronously cater for understanding i) buildings technical performance (fabric and building heating, cooling and ventilation systems) and ii) occupant's motivation, ability, knowledge and efficacy for adopting low carbon lifestyles. When deployed at scale, the above will enable cost effective, targeted interventions for both building fabric and systems improvement and towards empowering their occupants to live sustainably. The paper describes such a quantitative and qualitative approach and proposes assessment tools. Further, the authors comment on the potential benefits from monitoring campaigns when deployed at scale.",
+    "doi": "",
+    "pdf_link": "",
+    "content": "sustainable future building and life style assessment e i gaura j brusey j halloran r wilkins r rednic energy both in terms of its production and its usage has occupied a prime place in research as well as politics and world economy for the past few years the majority of nations are aiming to deliver severe carbon cuts in the next few years however achieving a carbon free future needs more than infrastructure investment and novel efficient technologies for buildings transportation and other large consumer domains it needs a better understanding of people as consumers as well as a better understanding of energy waste across the multitude of socio techical systems around us with regards to the built environment and particularly residential buildings the authors propose that dual quantitative and qualitative approaches to characterising assessing and improving occupied buildings are necessary such approaches would synchronously cater for understanding i buildings technical performance fabric and building heating cooling and ventilation systems and ii occupant s motivation ability knowledge and efficacy for adopting low carbon lifestyles when deployed at scale the above will enable cost effective targeted interventions for both building fabric and systems improvement and towards empowering their occupants to live sustainably the paper describes such a quantitative and qualitative approach and proposes assessment tools further the authors comment on the potential benefits from monitoring campaigns when deployed at scale"
+  },
+  {
+    "title": "Designing communication protocols for holonic control devices using elementary nets",
+    "pub_link": "https://pureportal.coventry.ac.uk/en/publications/designing-communication-protocols-for-holonic-control-devices-usi-2/",
+    "authors": [
+      "James Brusey",
+      "D. McFarlane"
+    ],
+    "author_profiles": [
+      "https://pureportal.coventry.ac.uk/en/persons/james-brusey/"
+    ],
+    "year": "",
+    "abstract": "",
+    "doi": "https://doi.org/10.1007/11537847_7",
+    "pdf_link": "",
+    "content": "designing communication protocols for holonic control devices using elementary nets james brusey d mcfarlane"
   }
 ]

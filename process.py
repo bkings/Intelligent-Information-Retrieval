@@ -1,5 +1,5 @@
 import streamlit as st
-from ir_core.crawler import crawl
+from ir_core.crawler_main import crawl
 from ir_core.index_manager import search
 
 BASE_URL = "https://pureportal.coventry.ac.uk"
