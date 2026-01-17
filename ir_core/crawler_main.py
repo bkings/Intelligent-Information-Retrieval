@@ -165,12 +165,10 @@ def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
             a.strip() for a in non_member_authors.split(",") if a.strip()
         )
 
-    year_elem = soup.select_one("time, .result-meta-data [datetime], [class*='year']")
+    year_elem = soup.select_one("[class*='details'] .properties .status td .date")
     if year_elem:
         logger.info("Year located.")
-        pub_data["year"] = year_elem.get(
-            "datetime", year_elem.get_text(strip=True) if year_elem else "N/A"
-        )
+        pub_data["year"] = year_elem.get_text(strip=True) if year_elem else "N/A"
 
     abstract_elem = soup.select_one("[class*='abstract'], .description, p.abstract")
     if abstract_elem:
@@ -302,7 +300,8 @@ def crawl_all_profiles(
     i = 1
 
     for link_elem in profile_links:
-        if i in [1, 2, 10]:
+        # if i in [1, 2, 10]:
+        if i in [1]:
             profile_url = link_elem.get("href")
             if profile_url and not profile_url.startswith("https://"):
                 profile_url = "https://pureportal.coventry.ac.uk" + profile_url
