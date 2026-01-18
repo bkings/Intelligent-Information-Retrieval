@@ -82,16 +82,16 @@ def get_persons_url(driver: WebDriver, base_url: str) -> str:
     """Navigate to profiles tab"""
     print("Fetching profiles URL ...")
     driver.get(base_url)
+    logger.info(f"In {WAIT_TIME} seconds ...")
     time.sleep(WAIT_TIME)
-    logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
     remove_consent_overlay(driver)
     # Find the profile link
     profile_link = driver.find_element(
         By.CSS_SELECTOR, "#page-content .subMenu a[href*='persons']"
     )
     driver.execute_script("arguments[0].click();", profile_link)
+    logger.info(f"In {WAIT_TIME} seconds ...")
     time.sleep(WAIT_TIME)
-    logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
     print(f"Found Profiles url: {driver.current_url}")
     return driver.current_url
 
@@ -100,18 +100,46 @@ def get_publication_url(driver: WebDriver, base_url: str) -> str:
     """Navigate to publications tab"""
     print("Fetching publications URL ...")
     driver.get(base_url)
+    logger.info(f"In {WAIT_TIME} seconds ...")
     time.sleep(WAIT_TIME)
-    logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
     remove_consent_overlay(driver)
     # Find the publication link
     pub_link = driver.find_element(
         By.CSS_SELECTOR, "#page-content .subMenu a[href*='publication']"
     )
     driver.execute_script("arguments[0].click();", pub_link)
+    logger.info(f"In {WAIT_TIME} seconds ...")
     time.sleep(WAIT_TIME)
-    logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
     print(f"Found Publication url: {driver.current_url}")
     return driver.current_url
+
+
+def retrieve_keywords(soup: BeautifulSoup) -> str:
+    keywords_elem = soup.select(".keyword-group .relations.keywords span")
+    if keywords_elem:
+        return " ".join(k.get_text(strip=True) for k in keywords_elem)
+    return None
+
+
+def retrieve_fingerprints(driver: WebDriver) -> str:
+    try:
+        fingerprint_link = driver.find_element(
+            By.CSS_SELECTOR, "#page-content .subMenu a[href*='/fingerprints']"
+        )
+        driver.execute_script("arguments[0].click();", fingerprint_link)
+        logger.info("Retrieving fingerprints ...")
+        logger.info(f"In {WAIT_TIME} seconds ...")
+        time.sleep(WAIT_TIME)
+
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+        fingerprint_elem = soup.select(
+            ".publication-fingerprints .concept_listing span.concept"
+        )
+        if fingerprint_elem:
+            return " ".join(f.get_text(strip=True) for f in fingerprint_elem)
+    except NoSuchElementException:
+        print("No fingerprints")
+    return None
 
 
 def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
@@ -123,8 +151,8 @@ def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
 
     print(f"Crawling individual page {pub_url}")
     driver.get(pub_url)
+    logger.info(f"In {WAIT_TIME} seconds ...")
     time.sleep(WAIT_TIME)
-    logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
     remove_consent_overlay(driver)
 
     soup = BeautifulSoup(driver.page_source, "html.parser")
@@ -137,6 +165,8 @@ def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
         "abstract": "",
         "doi": "",
         "pdf_link": "",
+        "keywords": "",
+        "fingerprints": "",
         "content": "",
     }
 
@@ -185,8 +215,14 @@ def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
     if pdf_elem:
         pub_data["pdf_link"] = pdf_elem.get("href", "") if pdf_elem else ""
 
+    keyword_elem = retrieve_keywords(soup)
+    pub_data["keywords"] = keyword_elem if keyword_elem else ""
+
+    fingerprint_elem = retrieve_fingerprints(driver)
+    pub_data["fingerprints"] = fingerprint_elem if fingerprint_elem else ""
+
     pub_data["content"] = preprocess(
-        f"{pub_data['title']} {' '.join(pub_data['authors'])} {pub_data['year']} {pub_data['abstract']}"
+        f"{pub_data['title']} {' '.join(pub_data['authors'])} {pub_data['year']} {pub_data['abstract']} {pub_data['keywords']} {pub_data['fingerprints']}"
     )
 
     unique_publications.add(pub_url)
@@ -204,8 +240,8 @@ def crawl_all_pages(
     while current_url:
         print(f"Crawling all publications from page {page_num}: {current_url}")
         driver.get(current_url)
+        logger.info(f"In {WAIT_TIME} seconds ...")
         time.sleep(WAIT_TIME)
-        logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
         remove_consent_overlay(driver)
 
         soup = BeautifulSoup(driver.page_source, "html.parser")
@@ -246,8 +282,8 @@ def crawl_all_pages(
             # If multiple authors have same publication then we won't re-crawl and as a result we will not be directed to that page
             if driver.current_url != current_url:
                 driver.get(current_url)
+                logger.info(f"In {WAIT_TIME} seconds ...")
                 time.sleep(WAIT_TIME)
-                logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
                 remove_consent_overlay(driver)
             print(f"Current url {driver.current_url}")
 
@@ -290,8 +326,8 @@ def crawl_all_profiles(
     pubs_from_all_profiles = []
     print(f"Crawling all profiles from {profiles_url}")
     driver.get(profiles_url)
+    logger.info(f"In {WAIT_TIME} seconds ...")
     time.sleep(WAIT_TIME)
-    logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
     remove_consent_overlay(driver)
     soup = BeautifulSoup(driver.page_source, "html.parser")
     profile_links = soup.select("#main-content .grid-results h3 a")
@@ -301,7 +337,7 @@ def crawl_all_profiles(
 
     for link_elem in profile_links:
         # if i in [1, 2, 10]:
-        if i in [1,10]:
+        if i in [10]:
             profile_url = link_elem.get("href")
             if profile_url and not profile_url.startswith("https://"):
                 profile_url = "https://pureportal.coventry.ac.uk" + profile_url
