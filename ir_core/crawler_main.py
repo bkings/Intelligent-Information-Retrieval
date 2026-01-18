@@ -17,6 +17,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from bs4 import BeautifulSoup
 
 from ir_core.index_manager import preprocess
+from utils.util import extract_year
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -118,7 +119,7 @@ def get_publication_url(driver: WebDriver, base_url: str) -> str:
 def retrieve_keywords(soup: BeautifulSoup) -> str:
     keywords_elem = soup.select(".keyword-group .relations.keywords span")
     if keywords_elem:
-        return " ".join(k.get_text(strip=True) for k in keywords_elem)
+        return ",".join(k.get_text(strip=True) for k in keywords_elem)
     return None
 
 
@@ -137,7 +138,7 @@ def retrieve_fingerprints(driver: WebDriver) -> str:
             ".publication-fingerprints .concept_listing span.concept"
         )
         if fingerprint_elem:
-            return " ".join(f.get_text(strip=True) for f in fingerprint_elem)
+            return ",".join(f.get_text(strip=True) for f in fingerprint_elem)
     except NoSuchElementException:
         print("No fingerprints")
     return None
@@ -169,7 +170,8 @@ def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
         "keywords": "",
         "fingerprints": "",
         "content": "",
-        "last_crawled": ""
+        "last_crawled": "",
+        "year_only":""
     }
 
     title_elem = soup.find("h1", id="firstheading") or soup.select_one("h1")
@@ -201,6 +203,7 @@ def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
     if year_elem:
         logger.info("Year located.")
         pub_data["year"] = year_elem.get_text(strip=True) if year_elem else "N/A"
+        pub_data["year_only"] = extract_year(pub_data["year"])
 
     abstract_elem = soup.select_one("[class*='abstract'], .description, p.abstract")
     if abstract_elem:
@@ -224,7 +227,7 @@ def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
     pub_data["fingerprints"] = fingerprint_elem if fingerprint_elem else ""
 
     pub_data["content"] = preprocess(
-        f"{pub_data['title']} {' '.join(pub_data['authors'])} {pub_data['year']} {pub_data['abstract']} {pub_data['keywords']} {pub_data['fingerprints']}"
+        f"{pub_data['title']} {' '.join(pub_data['authors'])} {pub_data['year']} {pub_data['abstract']} {pub_data['keywords'].replace(",", " ")} {pub_data['fingerprints'].replace(",", " ")}"
     )
 
     unique_publications.add(pub_url)

@@ -3,7 +3,7 @@ from ir_core.index_manager import search
 
 def processQuery(userQuery: str):
     if not userQuery:
-        st.info("Enter to search for publications.")
+        st.warning("Enter query to search for publications.")
         return
 
     results = search(userQuery)
