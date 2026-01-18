@@ -51,5 +51,5 @@ def search(query: str, top_k: int = 10) -> List[Dict[str, Any]]:
             doc = index["docs"][idx]
             # Highlight matching parts
             snippet = doc.get("abstract", doc["title"])[:200] + "..."
-            results.append({**doc, "relevancy": float(score), "snippet": snippet})
+            results.append({**doc, "relevancy_score": float(score), "snippet": snippet})
     return results

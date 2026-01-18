@@ -301,7 +301,7 @@ def crawl_all_profiles(
 
     for link_elem in profile_links:
         # if i in [1, 2, 10]:
-        if i in [1]:
+        if i in [1,10]:
             profile_url = link_elem.get("href")
             if profile_url and not profile_url.startswith("https://"):
                 profile_url = "https://pureportal.coventry.ac.uk" + profile_url

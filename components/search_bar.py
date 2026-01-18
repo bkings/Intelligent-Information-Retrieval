@@ -4,9 +4,6 @@ import streamlit as st
 def search_bar(
     placeholder: str = "Enter to search ...", button_label: str = "🔍"
 ) -> tuple[str, bool]:
-    # Source - https://stackoverflow.com/a
-# Posted by Jamiu S., modified by community. See post 'Timeline' for change history
-# Retrieved 2026-01-09, License - CC BY-SA 4.0
 
     st.markdown("""
     <style>
