@@ -3,6 +3,7 @@ import time
 import json
 import logging
 
+from datetime import datetime
 from typing import List, Dict, Any
 from pathlib import Path
 from robotexclusionrulesparser import RobotExclusionRulesParser
@@ -168,6 +169,7 @@ def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
         "keywords": "",
         "fingerprints": "",
         "content": "",
+        "last_crawled": ""
     }
 
     title_elem = soup.find("h1", id="firstheading") or soup.select_one("h1")
@@ -226,6 +228,7 @@ def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
     )
 
     unique_publications.add(pub_url)
+    pub_data["last_crawled"] = datetime.now().strftime("%Y-%m-%d %H:%M")
     logger.info(f"LOGGER: Crawled details: {pub_data['title'][:50]} ... ")
     return pub_data
 

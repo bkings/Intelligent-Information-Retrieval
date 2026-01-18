@@ -23,8 +23,11 @@ with st.sidebar:
         with st.spinner("Crawling in progress ..."):
             crawl(BASE_URL, ORG_URL, False)
         st.success("Crawl successful. Index updated!")
-    num_pubs = len(load_index())
+    docs = load_index()
+    num_pubs = len(docs)
+    last_crawled = docs[0]['last_crawled']
     st.metric("Indexed publications", num_pubs)
+    st.info(f"Last crawled: {last_crawled}")
     st.info("Crawl scheduled to run weekly")
 
 userQuery, searchClicked = search_bar()
