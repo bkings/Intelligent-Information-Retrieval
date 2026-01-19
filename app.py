@@ -17,9 +17,28 @@ ORG_URL = (
 )
 
 st.set_page_config(page_title="🔍 Dig N Digest", layout="wide")
+st.markdown(
+    """
+    <style>
+    #dig-n-digest {
+        text-align: center;
+    }
+
+    .eoo3rg91 {
+        # text-align: center;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 st.title("🔍 Dig N Digest")
 st.markdown(
-    "Search publications by Coventry University's Research Centre for Computational Science and Mathematical Modelling."
+    """
+        <div style="text-align:center;">
+            <h6>Search publications by Coventry University's Research Centre for Computational Science and Mathematical Modelling.</h6>
+        </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 docs = load_index()
@@ -95,9 +114,9 @@ elif page == "Summary":
         tfidf = vectorizer.fit_transform([all_content])
         keywords = vectorizer.get_feature_names_out()
         scores = tfidf.toarray()[0]
-        df_keywords = pd.DataFrame({"Word": keywords, "Tf-Idf Score": scores}).sort_values(
-            "Tf-Idf Score", ascending=False
-        )
+        df_keywords = pd.DataFrame(
+            {"Word": keywords, "Tf-Idf Score": scores}
+        ).sort_values("Tf-Idf Score", ascending=False)
         st.bar_chart(df_keywords.set_index("Word"))
         st.dataframe(df_keywords, hide_index=True)
     except Exception as e:

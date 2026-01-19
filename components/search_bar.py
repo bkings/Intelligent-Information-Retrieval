@@ -17,10 +17,11 @@ def search_bar(
     /*font-weight: bold;*/
     font-size: 110%;
     }
+    
     </style>
     """, unsafe_allow_html=True)
 
-    queryCol, buttonCol = st.columns([6, 1], gap=None)
+    empty, queryCol, buttonCol = st.columns([1, 3, 1], gap=None)
 
     with queryCol:
         userQuery = st.text_input(
