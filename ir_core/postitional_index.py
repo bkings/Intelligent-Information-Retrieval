@@ -70,8 +70,12 @@ def phrase_search(
         for start_pos in doc_post_lists[0]:  # Anchor to first term
             positions_match = True
             for i in range(1, len(tokens)):
-                expected_pos = start_pos + i  # Exact phrase len
-                if expected_pos not in doc_post_lists[i]:
+                # expected_pos = start_pos + i  # Exact phrase len
+                expected_pos = [
+                    p for p in doc_post_lists[i] if abs(p - (start_pos + i)) <= window
+                ]
+                # if expected_pos not in doc_post_lists[i]:
+                if not expected_pos:
                     positions_match = False
                     break
             if positions_match:
