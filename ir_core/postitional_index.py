@@ -55,7 +55,8 @@ def phrase_search(
     candidate_docs = list(postings.get(tokens[0], {}).keys())
     for token in tokens[1:]:
         next_docs = list(postings.get(token, {}).keys())
-        candidate_docs = sorted(set(candidate_docs) & set(next_docs))
+        # candidate_docs = sorted(set(candidate_docs) & set(next_docs))
+        candidate_docs = intersect_postings(candidate_docs, next_docs)
 
     scored_results = []
     for doc_id in candidate_docs:

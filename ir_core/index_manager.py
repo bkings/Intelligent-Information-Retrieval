@@ -1,8 +1,7 @@
-import re
 import json
 import numpy as np
 
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 from constants.constants import INDEX_FILE_PATH, INDEX_FILE_POSITIONAL
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -54,7 +53,7 @@ def search_TFIDF(query: str, top_k: int = 10) -> List[Dict[str, Any]]:
     return results
 
 
-def search(query: str, top_k: int = 10) -> List[Dict[str, Any]]:
+def search(query: str, top_k: int = 10) -> Tuple[str, List[Dict[str, Any]]]:
     docs = load_index()
     if not docs:
         return []
@@ -70,7 +69,7 @@ def search(query: str, top_k: int = 10) -> List[Dict[str, Any]]:
         phrase = query.strip('"')
         results = phrase_search(postings, phrase, docs, top_k)
         if results:
-            return results
+            return "PI", results
     # Keyword fallback
     # return keyword_search(postings, query, docs, top_k)
-    return search_TFIDF(query, top_k)
+    return "TFIDF", search_TFIDF(query, top_k)

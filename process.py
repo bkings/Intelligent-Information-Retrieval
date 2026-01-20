@@ -1,5 +1,7 @@
 import streamlit as st
-from ir_core.index_manager import search
+import time
+from ir_core.index_manager import search, load_index
+from ir_core.evaluation import evaluate_search
 
 
 def processQuery(userQuery: str):
@@ -7,10 +9,36 @@ def processQuery(userQuery: str):
         st.warning("Enter query to search for publications.")
         return
 
-    results = search(userQuery)
+    search_type, results = search(userQuery)
     if not results:
         st.warning("No matching publications found.")
         return
+    with st.status("Processing ...") as status:
+        if search_type == "PI":
+            st.write("Building positional index ...")
+            time.sleep(0.1)
+            st.write("Loading indexes ...")
+            time.sleep(0.1)
+            st.write("Phrase Searching and returning results ...")
+            time.sleep(0.1)
+            status.update(label="Search complete", state="complete", expanded=False)
+        elif search_type == "TFIDF":
+            st.write("Creating TF-IDF index ...")
+            time.sleep(0.1)
+            st.write("Calculating cosine similarities ...")
+            time.sleep(0.1)
+            st.write("Searching and returning results ...")
+            time.sleep(0.1)
+            status.update(label="Search complete", state="complete", expanded=False)
+
+    if st.checkbox("Show evaluation metrics"):
+        metrics = evaluate_search(userQuery, results, load_index())
+        st.json(metrics)
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("Precision", f"{metrics['precision']:.2f}")
+        col2.metric("Recall", f"{metrics['recall']:.2f}")
+        col3.metric("F1 Score", f"{metrics['f1']:.2f}")
+        col4.metric("Accuracy", f"{metrics['accuracy']:.2f}")
 
     st.subheader(f"Showing results for {userQuery} ({len(results)} found)")
     for i, pub in enumerate(results, 1):
