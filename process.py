@@ -1,6 +1,7 @@
 import streamlit as st
 from ir_core.index_manager import search
 
+
 def processQuery(userQuery: str):
     if not userQuery:
         st.warning("Enter query to search for publications.")
@@ -14,7 +15,10 @@ def processQuery(userQuery: str):
     st.subheader(f"Showing results for {userQuery} ({len(results)} found)")
     for i, pub in enumerate(results, 1):
         score_str = f"Relevancy: {pub['relevancy_score']:.3f}"
-        with st.expander(f"{i}. {pub['title']} [{score_str}]"):
+        st.caption(
+            f"Phrase matches: {pub.get("phrase_matches", 0)} | Score: {score_str}"
+        )
+        with st.expander(f"{i}. {pub['title']}", expanded=True, icon="👉"):
             st.write(
                 "**Authors:** "
                 + (

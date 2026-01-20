@@ -3,15 +3,16 @@ import json
 import numpy as np
 
 from typing import List, Dict, Any
-from constants.constants import INDEX_FILE_PATH
+from constants.constants import INDEX_FILE_PATH, INDEX_FILE_POSITIONAL
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-
-def preprocess(text: str) -> str:
-    """Tokenize, lowercase, remove punctuations"""
-    text = re.sub(r"[^\w\s]", " ", text.lower())
-    return " ".join(text.split())  # Normalizing the whitespaces
+from ir_core.postitional_index import (
+    load_positional_index,
+    build_positional_index,
+    phrase_search,
+    keyword_search,
+)
+from ir_core.preprocessors.preprocess import preprocess
 
 
 def load_index() -> List[Dict[str, Any]]:
@@ -23,10 +24,8 @@ def load_index() -> List[Dict[str, Any]]:
 
 
 def build_tfidf_index(docs: List[Dict[str, Any]]) -> Dict:
-    contents = [pub.get("content", "") for pub in docs]
-    vectorizer = TfidfVectorizer(
-        stop_words="english", min_df=1, max_df=0.9, ngram_range=(1, 2)
-    )
+    contents = [preprocess(pub.get("content", "")) for pub in docs]
+    vectorizer = TfidfVectorizer(stop_words="english")
     tfidf_matrix = vectorizer.fit_transform(contents)
     return {
         "docs": docs,
@@ -36,7 +35,7 @@ def build_tfidf_index(docs: List[Dict[str, Any]]) -> Dict:
     }
 
 
-def search(query: str, top_k: int = 10) -> List[Dict[str, Any]]:
+def search_TFIDF(query: str, top_k: int = 10) -> List[Dict[str, Any]]:
     docs = load_index()
     if not docs:
         return []
@@ -53,3 +52,25 @@ def search(query: str, top_k: int = 10) -> List[Dict[str, Any]]:
             snippet = doc.get("abstract", doc["title"])[:200] + "..."
             results.append({**doc, "relevancy_score": float(score), "snippet": snippet})
     return results
+
+
+def search(query: str, top_k: int = 10) -> List[Dict[str, Any]]:
+    docs = load_index()
+    if not docs:
+        return []
+
+    if not INDEX_FILE_POSITIONAL.exists():
+        build_positional_index(docs)
+
+    postings = load_positional_index()
+
+    query = preprocess(query)
+    # Phrase if quoted or multi-word
+    if '"' in query or len(query.split()) >= 2:
+        phrase = query.strip('"')
+        results = phrase_search(postings, phrase, docs, top_k)
+        if results:
+            return results
+    # Keyword fallback
+    # return keyword_search(postings, query, docs, top_k)
+    return search_TFIDF(query, top_k)
