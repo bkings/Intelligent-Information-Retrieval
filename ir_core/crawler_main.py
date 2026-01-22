@@ -171,7 +171,7 @@ def crawl_single_publication(driver: WebDriver, pub_url: str) -> Dict[str, Any]:
         "fingerprints": "",
         "content": "",
         "last_crawled": "",
-        "year_only":""
+        "year_only": "",
     }
 
     title_elem = soup.find("h1", id="firstheading") or soup.select_one("h1")
@@ -254,7 +254,7 @@ def crawl_all_pages(
         pub_links = soup.select("#main-content .list-results .list-result-item h3 a")
 
         # Only for testing
-        i = 1
+        # i = 1
 
         for link_elem in pub_links:
             pub_url = link_elem.get("href")
@@ -267,9 +267,9 @@ def crawl_all_pages(
                 # time.sleep(WAIT_TIME)
                 # logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
 
-            if i == 1:
-                break
-            i += 1
+            # if i == 1:
+            #     break
+            # i += 1
 
         # Only For testing
         # if page_num == 1:
@@ -339,11 +339,12 @@ def crawl_all_profiles(
     profile_links = soup.select("#main-content .grid-results h3 a")
 
     # Only for testing (i value)
-    i = 1
+    # i = 1
 
     for link_elem in profile_links:
-        # if i in [1, 2, 10]:
-        if i in [10]:
+        try:
+            # if i in [1, 2, 10]:
+            # if i in [10]:
             profile_url = link_elem.get("href")
             if profile_url and not profile_url.startswith("https://"):
                 profile_url = "https://pureportal.coventry.ac.uk" + profile_url
@@ -355,7 +356,10 @@ def crawl_all_profiles(
         # if i == 3:
         #     break
 
-        i += 1
+        # i += 1
+        except Exception as e:
+            print(f"Error in profile crawl {link_elem}:", e)
+            continue
 
     return pubs_from_all_profiles
 

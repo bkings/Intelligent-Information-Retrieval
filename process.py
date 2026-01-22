@@ -15,20 +15,20 @@ def processQuery(userQuery: str):
         return
     with st.status("Processing ...") as status:
         if search_type == "PI":
-            st.write("Building positional index ...")
-            time.sleep(0.1)
-            st.write("Loading indexes ...")
-            time.sleep(0.1)
-            st.write("Phrase Searching and returning results ...")
-            time.sleep(0.1)
+            status.update(label="Building positional index ...")
+            time.sleep(0.3)
+            status.update(label="Loading indexes ...")
+            time.sleep(0.3)
+            status.update(label="Phrase Searching and returning results ...")
+            time.sleep(0.3)
             status.update(label="Search complete", state="complete", expanded=False)
         elif search_type == "TFIDF":
-            st.write("Creating TF-IDF index ...")
-            time.sleep(0.1)
-            st.write("Calculating cosine similarities ...")
-            time.sleep(0.1)
-            st.write("Searching and returning results ...")
-            time.sleep(0.1)
+            status.update(label="Creating TF-IDF index ...")
+            time.sleep(0.3)
+            status.update(label="Calculating cosine similarities ...")
+            time.sleep(0.3)
+            status.update(label="Searching and returning results ...")
+            time.sleep(0.3)
             status.update(label="Search complete", state="complete", expanded=False)
 
     if st.checkbox("Show evaluation metrics"):
@@ -46,19 +46,28 @@ def processQuery(userQuery: str):
         st.caption(
             f"Phrase matches: {pub.get("phrase_matches", 0)} | Score: {score_str}"
         )
-        with st.expander(f"{i}. {pub['title']}", expanded=True, icon="👉"):
-            st.write(
-                "**Authors:** "
-                + (
-                    ", ".join(pub["authors"][:5])
-                    + (", et al." if len(pub["authors"]) > 5 else "")
-                )
-            )
-            st.write(f"**Year:** {pub['year']}")
+
+        pub_year = pub["year"]
+        if pub_year:
+            pub_year = f"**[{pub_year}]**"
+
+        with st.expander(
+            f"{i}. {pub_year} {pub['title'][:100]} ...",
+            expanded=True,
+            icon="👉",
+        ):
+            if pub["author_profiles"]:
+                fullRow = ""
+                for profile in pub["author_profiles"]:
+                    authorLink = f"[{profile.split('/')[-2].replace("-", " ").title()}]({profile})"
+                    fullRow = fullRow + ", " + authorLink
+                if fullRow:
+                    st.markdown(f"**Authors:** {(fullRow.strip(","))}")
+
             if pub.get("snippet"):
                 st.write("**Snippet:**" + pub["snippet"])
             if pub.get("abstract"):
-                with st.expander("Full Abstract"):
+                with st.expander(f"{pub['abstract'][:130]}..."):
                     st.write(pub["abstract"])
 
             cols = st.columns(3)
@@ -69,7 +78,3 @@ def processQuery(userQuery: str):
                 cols[1].markdown(f"[DOI]({pub['doi']})")
             if pub["pdf_link"]:
                 cols[2].markdown(f"[PDF]({pub['pdf_link']})")
-            if pub["author_profiles"]:
-                st.markdown("**Author Profiles:**")
-                for profile in pub["author_profiles"]:
-                    st.markdown(f"[{profile.split('/')[-2].title()}]({profile})")
