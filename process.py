@@ -6,7 +6,7 @@ from ir_core.evaluation import evaluate_search
 
 def processQuery(userQuery: str):
     if not userQuery:
-        st.warning("Enter query to search for publications.")
+        st.error("Enter query to search for publications.")
         return
 
     search_type, results = search(userQuery)
@@ -18,17 +18,17 @@ def processQuery(userQuery: str):
             status.update(label="Building positional index ...")
             time.sleep(0.3)
             status.update(label="Loading indexes ...")
-            time.sleep(0.3)
+            time.sleep(0.2)
             status.update(label="Phrase Searching and returning results ...")
-            time.sleep(0.3)
+            time.sleep(0.2)
             status.update(label="Search complete", state="complete", expanded=False)
         elif search_type == "TFIDF":
             status.update(label="Creating TF-IDF index ...")
             time.sleep(0.3)
             status.update(label="Calculating cosine similarities ...")
-            time.sleep(0.3)
+            time.sleep(0.2)
             status.update(label="Searching and returning results ...")
-            time.sleep(0.3)
+            time.sleep(0.2)
             status.update(label="Search complete", state="complete", expanded=False)
 
     if st.checkbox("Show evaluation metrics"):
@@ -40,7 +40,7 @@ def processQuery(userQuery: str):
         col3.metric("F1 Score", f"{metrics['f1']:.2f}")
         col4.metric("Accuracy", f"{metrics['accuracy']:.2f}")
 
-    st.subheader(f"Showing results for {userQuery} ({len(results)} found)")
+    st.subheader(f"Showing results for '{userQuery}' ({len(results)} retrieved)")
     for i, pub in enumerate(results, 1):
         score_str = f"Relevancy: {pub['relevancy_score']:.3f}"
         st.caption(
