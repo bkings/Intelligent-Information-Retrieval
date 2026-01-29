@@ -64,10 +64,8 @@ def processQuery(userQuery: str):
                 if fullRow:
                     st.markdown(f"**Authors:** {(fullRow.strip(","))}")
 
-            if pub.get("snippet"):
-                st.write("**Snippet:**" + pub["snippet"])
             if pub.get("abstract"):
-                with st.expander(f"{pub['abstract'][:130]}..."):
+                with st.expander(f"**Snippet:** {pub['abstract'][:115]}..."):
                     st.write(pub["abstract"])
 
             cols = st.columns(3)
@@ -78,3 +76,10 @@ def processQuery(userQuery: str):
                 cols[1].markdown(f"[DOI]({pub['doi']})")
             if pub["pdf_link"]:
                 cols[2].markdown(f"[PDF]({pub['pdf_link']})")
+
+            keywords = pub["keywords"].split(",")[:2]
+            fingerprints = pub["fingerprints"].split(",")[:2]
+            combined = [*keywords, *fingerprints]
+            st.pills(
+                "Related keywords", combined, selection_mode="single", key=f"pill{i}"
+            )
