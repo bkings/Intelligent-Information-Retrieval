@@ -77,9 +77,22 @@ def processQuery(userQuery: str):
             if pub["pdf_link"]:
                 cols[2].markdown(f"[PDF]({pub['pdf_link']})")
 
-            keywords = pub["keywords"].split(",")[:2]
-            fingerprints = pub["fingerprints"].split(",")[:2]
-            combined = [*keywords, *fingerprints]
-            st.pills(
-                "Related keywords", combined, selection_mode="single", key=f"pill{i}"
-            )
+            pubKeywords = pub["keywords"]
+            pubFingerprints = pub["fingerprints"]
+            keywords = []
+            fingerprints = []
+
+            if pubKeywords:
+                keywords = pubKeywords.split(",")[:2]
+
+            if pubFingerprints:
+                fingerprints = pubFingerprints.split(",")[:2]
+
+            if keywords or fingerprints:
+                combined = [*keywords, *fingerprints]
+                st.pills(
+                    "Related keywords",
+                    combined,
+                    selection_mode="single",
+                    key=f"pill{i}",
+                )
