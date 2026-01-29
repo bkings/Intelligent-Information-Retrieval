@@ -1,5 +1,8 @@
 import streamlit as st
 import time
+
+from utils.util import highlight_terms
+from ir_core.preprocessors.preprocess import preprocess, preprocess_basic
 from ir_core.index_manager import search, load_index
 from ir_core.evaluation import evaluate_search
 
@@ -65,8 +68,31 @@ def processQuery(userQuery: str):
                     st.markdown(f"**Authors:** {(fullRow.strip(","))}")
 
             if pub.get("abstract"):
-                with st.expander(f"**Snippet:** {pub['abstract'][:115]}..."):
-                    st.write(pub["abstract"])
+                preprocessedBasic = preprocess_basic(userQuery)
+                firsttTerm = preprocessedBasic.split()[0]
+                highlighted_abstract_title = highlight_terms(
+                    pub["abstract"], [preprocessedBasic.split()[0]]
+                )
+                indexx = highlighted_abstract_title.find(firsttTerm)
+                leftRange = indexx - 160
+                rightRange = indexx + 50
+
+                if indexx <= -1 or leftRange <= -1:
+                    leftRange = None
+
+                highlighted_abstract_title_ranged = highlighted_abstract_title[
+                    leftRange:rightRange
+                ]
+
+                st.markdown(
+                    f"**Snippet:** {highlighted_abstract_title_ranged}...",
+                    unsafe_allow_html=True,
+                )
+                with st.expander("Abstract"):
+                    highlighted_abstract = highlight_terms(
+                        pub["abstract"], preprocessedBasic.split()
+                    )
+                    st.markdown(highlighted_abstract, unsafe_allow_html=True)
 
             cols = st.columns(3)
 
