@@ -16,7 +16,7 @@ def job():
     print("Crawl successful.")
 
 
-schedule.every().sunday.at("00:24").do(job)
+schedule.every().friday.at("23:15").do(job)
 
 if __name__ == "__main__":
     print("Scheduler running ... Ctrl+C to stop")

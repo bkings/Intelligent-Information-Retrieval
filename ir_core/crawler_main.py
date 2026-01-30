@@ -254,7 +254,7 @@ def crawl_all_pages(
         pub_links = soup.select("#main-content .list-results .list-result-item h3 a")
 
         # Only for testing
-        # i = 1
+        i = 1
 
         for link_elem in pub_links:
             pub_url = link_elem.get("href")
@@ -267,8 +267,8 @@ def crawl_all_pages(
                 # time.sleep(WAIT_TIME)
                 # logger.info(f"Sleeping for {WAIT_TIME} seconds ...")
 
-            # if i == 1:
-            #     break
+            if i == 1:
+                break
             # i += 1
 
         # Only For testing
@@ -339,24 +339,24 @@ def crawl_all_profiles(
     profile_links = soup.select("#main-content .grid-results h3 a")
 
     # Only for testing (i value)
-    # i = 1
+    i = 1
 
     for link_elem in profile_links:
         try:
-            # if i in [1, 2, 10]:
-            # if i in [10]:
-            profile_url = link_elem.get("href")
-            if profile_url and not profile_url.startswith("https://"):
-                profile_url = "https://pureportal.coventry.ac.uk" + profile_url
-            if profile_url:
-                start_url = profile_url + "publications"
-                all_publications = crawl_all_pages(driver, wait, start_url)
-                pubs_from_all_profiles.extend(all_publications)
+            # if i in [1, 10]:
+            if i in [10]:
+                profile_url = link_elem.get("href")
+                if profile_url and not profile_url.startswith("https://"):
+                    profile_url = "https://pureportal.coventry.ac.uk" + profile_url
+                if profile_url:
+                    start_url = profile_url + "publications"
+                    all_publications = crawl_all_pages(driver, wait, start_url)
+                    pubs_from_all_profiles.extend(all_publications)
 
-        # if i == 3:
-        #     break
+            if i == 10:
+                break
 
-        # i += 1
+            i += 1
         except Exception as e:
             print(f"Error in profile crawl {link_elem}:", e)
             continue
